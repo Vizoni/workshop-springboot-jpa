@@ -1,8 +1,10 @@
 package com.raphaelvizoni.spring_first_project.config;
 
+import com.raphaelvizoni.spring_first_project.entities.Category;
 import com.raphaelvizoni.spring_first_project.entities.Order;
 import com.raphaelvizoni.spring_first_project.entities.User;
 import com.raphaelvizoni.spring_first_project.entities.enums.OrderStatus;
+import com.raphaelvizoni.spring_first_project.repositories.CategoryRepository;
 import com.raphaelvizoni.spring_first_project.repositories.OrderRepository;
 import com.raphaelvizoni.spring_first_project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,18 @@ public class TestConfig implements CommandLineRunner {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
 
     // metodo do commandLineRunner, vai executar quando a aplicacao for iniciada
     @Override
     public void run(String... args) throws Exception {
+        Category cat1 = new Category(null, "Electronics");
+        Category cat2 = new Category(null, "Books");
+        Category cat3 = new Category(null, "Computers");
+        categoryRepository.saveAll(Arrays.asList(cat1,cat2, cat3));
+
         User u1 = new User(null, "Maria Brown", "maria@gmail.com", "988888888", "123456");
         User u2 = new User(null, "Alex Green", "alex@gmail.com", "977777777", "123456");
         userRepository.saveAll(Arrays.asList(u1,u2));
