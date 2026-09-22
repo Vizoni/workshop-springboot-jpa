@@ -30,4 +30,17 @@ public class UserService {
     public void delete(Long id) {
         repository.deleteById(id);
     }
+
+    public User update(Long id, User obj) {
+        User userToBeUpdated = repository.getReferenceById(id);
+        updateData(userToBeUpdated, obj);
+        return repository.save(userToBeUpdated);
+    }
+
+    private void updateData(User userToBeUpdated, User obj) {
+        userToBeUpdated.setName(obj.getName());
+        userToBeUpdated.setEmail(obj.getEmail());
+        userToBeUpdated.setPhone(obj.getPhone());
+        // Não pode atualizar ID nem senha através desse método
+    }
 }
