@@ -3,6 +3,7 @@ package com.raphaelvizoni.spring_first_project.services;
 import com.raphaelvizoni.spring_first_project.entities.User;
 import com.raphaelvizoni.spring_first_project.repositories.UserRepository;
 import com.raphaelvizoni.spring_first_project.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -49,9 +50,13 @@ public class UserService {
     }
 
     public User update(Long id, User obj) {
-        User userToBeUpdated = repository.getReferenceById(id);
-        updateData(userToBeUpdated, obj);
-        return repository.save(userToBeUpdated);
+        try {
+            User userToBeUpdated = repository.getReferenceById(id);
+            updateData(userToBeUpdated, obj);
+            return repository.save(userToBeUpdated);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User userToBeUpdated, User obj) {
