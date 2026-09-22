@@ -31,13 +31,21 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        try {
-            repository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(id);
-        } catch (DataIntegrityViolationException e) {
-           throw new DataIntegrityViolationException(e.getMessage());
-        }
+//        try {
+//            repository.deleteById(id);
+//        } catch (EmptyResultDataAccessException e) {
+//            throw new ResourceNotFoundException(id);
+//        } catch (DataIntegrityViolationException e) {
+//           throw new DataIntegrityViolationException(e.getMessage());
+//        }
+
+        // O código acima é o do curso, porém devido a versão diferente, não funciona
+        // Com a solução abaixo eu consegui resolver o 404 caso tente deletar um usuário não existente
+        // Porém ainda estou sem conseguir tratar o erro de banco, caso o usuário exista e esteja vinculado à algum pedido
+        User user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+
+        repository.delete(user);
     }
 
     public User update(Long id, User obj) {
